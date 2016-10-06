@@ -52,6 +52,7 @@ public final class QueryUtils {
             e.printStackTrace();
         }*/
 
+        //1.URL をクリエイトして。。。
         //String を URL OBJ に変換する
         URL url = createUrl(requestUrl);
 
@@ -59,12 +60,14 @@ public final class QueryUtils {
         String jsonResponse = null;
 
         try {
+            //2.Http のリクエストを 作成して、実行。帰ってきた JSON を格納
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        //受け取った JSON レスポンス から、欲しいフィールドを取り出して、ArrayListに add を繰り返した結果を取得
+        //3.受け取った JSON レスポンス から、欲しいフィールドを取り出して、
+        // ArrayListに add を繰り返した結果を取得
         List<Earthquake> earthquakes = extractFeatureFromJson(jsonResponse);
 
         Log.i(LOG_TAG, "fetchEarthquakeData");
@@ -74,7 +77,7 @@ public final class QueryUtils {
 
 
     /**
-     * String URL を URL OBJ に変換して返す
+     * 1.String URL を URL OBJ に変換して返す
      */
     private static URL createUrl(String stringUrl) {
         URL url = null;
@@ -103,7 +106,8 @@ public final class QueryUtils {
         InputStream inputStream = null;
 
         try {
-            urlConnection = (HttpURLConnection) url.openConnection();//新規 HttpURLConnection を取得
+            //新規 HttpURLConnection を取得
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(10000/*milliseconds*/);
             urlConnection.setConnectTimeout(15000/*milliseconds*/);
             urlConnection.setRequestMethod("GET");
@@ -184,7 +188,7 @@ public final class QueryUtils {
                 long mTimeInMilliseconds = properties.getLong("time");
                 String url = properties.getString("url");
 
-                //抜き出したデータを元に、Earthquake OBJ を作成
+                //抜き出したデータを元に、Earthquake OBJ を作成。Earthquake クラスにて、状態と振る舞いを定義
                 Earthquake earthquake = new Earthquake(mag, place, mTimeInMilliseconds, url);
 
                 //Earthquake OBJ を ArrayList に add
